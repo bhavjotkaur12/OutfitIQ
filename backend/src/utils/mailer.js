@@ -9,16 +9,15 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendWelcomeEmail = async (to, name = '') => {
+const sendEmail = async (to, subject, text) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to,
-    subject: 'Welcome to OutfitIQ!',
-    text: `Hi${name ? ' ' + name : ''},\n\nWelcome to OutfitIQ! We're excited to help you discover your style.\n\nBest,\nThe OutfitIQ Team`,
-    // You can also add html: '<b>Welcome!</b>' for HTML emails
+    subject,
+    text,
   };
 
   await transporter.sendMail(mailOptions);
 };
 
-module.exports = sendWelcomeEmail;
+module.exports = sendEmail;
