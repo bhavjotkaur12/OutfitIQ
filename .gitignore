@@ -1,0 +1,8 @@
+   node_modules/
+   frontend/node_modules/
+   *.log
+   .DS_Store
+# Ignore all build artifacts and APKs
+frontend/android/app/build/
+*.apk
+*.so
