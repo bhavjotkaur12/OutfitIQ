@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, Alert, Animated, Easing } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import axios from 'axios';
@@ -46,6 +46,7 @@ const outfits = [
 const VisualOutfitTestScreen: React.FC<VisualOutfitTestScreenProps> = ({ navigation }) => {
   const [responses, setResponses] = useState<ResponsesState>({});
   const [currentIndex, setCurrentIndex] = useState(0);
+  const slideAnim = useRef(new Animated.Value(0)).current;
 
   const handleResponse = (
     outfitId: number,
@@ -60,7 +61,7 @@ const VisualOutfitTestScreen: React.FC<VisualOutfitTestScreenProps> = ({ navigat
     // Only auto-advance for "yes" or "no"
     if (response === 'yes' || response === 'no') {
       if (currentIndex < outfits.length - 1) {
-        setCurrentIndex(currentIndex + 1);
+        animateToNextCard();
       }
     }
     // For "partial", stay on the card and let user pick items
@@ -80,7 +81,7 @@ const VisualOutfitTestScreen: React.FC<VisualOutfitTestScreenProps> = ({ navigat
 
     // If this is the first item being selected, advance to next card
     if (!isSelected && prevParts.length === 0 && currentIndex < outfits.length - 1) {
-      setTimeout(() => setCurrentIndex(currentIndex + 1), 300); // slight delay for feedback
+      setTimeout(() => animateToNextCard(), 300); // slight delay for feedback
     }
   };
 
@@ -104,12 +105,32 @@ const VisualOutfitTestScreen: React.FC<VisualOutfitTestScreenProps> = ({ navigat
     }
   };
 
+  const animateToNextCard = () => {
+    // Slide out current card to the left
+    Animated.timing(slideAnim, {
+      toValue: -400, // slide left (adjust based on your card width)
+      duration: 300,
+      useNativeDriver: true,
+      easing: Easing.out(Easing.ease),
+    }).start(() => {
+      // After animation, reset position and show next card
+      slideAnim.setValue(400); // start next card off-screen right
+      setCurrentIndex(prev => prev + 1);
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+        easing: Easing.out(Easing.ease),
+      }).start();
+    });
+  };
+
   const outfit = outfits[currentIndex];
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Visual Outfit Test</Text>
-      <View style={styles.outfitCard}>
+      <Animated.View style={[styles.outfitCard, { transform: [{ translateX: slideAnim }] }]}>
         <Image source={outfit.image} style={styles.image} />
         <Text style={styles.title}>{outfit.title}</Text>
         <Text style={styles.style}>{outfit.style}</Text>
@@ -164,7 +185,7 @@ const VisualOutfitTestScreen: React.FC<VisualOutfitTestScreenProps> = ({ navigat
             ))}
           </View>
         )}
-      </View>
+      </Animated.View>
       {currentIndex === outfits.length - 1 && (
         <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
           <Text style={{ color: '#fff', fontWeight: 'bold' }}>Submit</Text>
