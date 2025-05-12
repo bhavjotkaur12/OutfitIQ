@@ -5,6 +5,7 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import type { AuthStackParamList } from '../navigation/types';
 import axios from 'axios';
 import GoogleSignInButton from '../components/GoogleSignInButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignupScreen = () => {
     const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
@@ -15,14 +16,13 @@ const SignupScreen = () => {
   const handleSignup = async () => {
     setLoading(true);
     try {
-      const res = await axios.post('http://10.0.2.2:5000/api/auth/register', {
-        email,
-        password,
-      });
-      Alert.alert('Success', 'Registration successful!');
+      await axios.post('http://10.0.2.2:5000/api/auth/register', { email, password });
+      // Automatically log in after signup
+      const res = await axios.post('http://10.0.2.2:5000/api/auth/login', { email, password });
+      await AsyncStorage.setItem('token', res.data.token);
       setEmail('');
       setPassword('');
-      navigation.navigate('Login');
+      navigation.navigate('StyleQuiz');
     } catch (err: any) {
       Alert.alert('Error', err.response?.data?.message || 'Registration failed');
     } finally {

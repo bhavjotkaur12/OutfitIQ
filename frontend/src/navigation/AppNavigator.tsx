@@ -4,6 +4,7 @@ import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
+import StyleQuizStack from './StyleQuizStack';
 import type { AuthStackParamList } from './types';
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -14,6 +15,7 @@ const AppNavigator = () => (
     <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
     <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />   
     <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+    <Stack.Screen name="StyleQuiz" component={StyleQuizStack} options={{ headerShown: false }} />
   </Stack.Navigator>
 );
 
