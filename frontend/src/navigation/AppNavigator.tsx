@@ -1,0 +1,20 @@
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import LoginScreen from '../screens/LoginScreen';
+import SignupScreen from '../screens/SignupScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import ResetPasswordScreen from '../screens/ResetPasswordScreen';
+import type { AuthStackParamList } from './types';
+
+const Stack = createStackNavigator<AuthStackParamList>();
+
+const AppNavigator = () => (
+  <Stack.Navigator initialRouteName="Login">
+    <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+    <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
+    <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />   
+    <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+  </Stack.Navigator>
+);
+
+export default AppNavigator; 

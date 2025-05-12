@@ -6,3 +6,4 @@
 frontend/android/app/build/
 *.apk
 *.so
+node_modules
