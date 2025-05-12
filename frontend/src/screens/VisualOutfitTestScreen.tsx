@@ -45,6 +45,7 @@ const outfits = [
 
 const VisualOutfitTestScreen: React.FC<VisualOutfitTestScreenProps> = ({ navigation }) => {
   const [responses, setResponses] = useState<ResponsesState>({});
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleResponse = (
     outfitId: number,
@@ -55,6 +56,32 @@ const VisualOutfitTestScreen: React.FC<VisualOutfitTestScreenProps> = ({ navigat
       ...prev,
       [outfitId]: { response, parts }
     }));
+
+    // Only auto-advance for "yes" or "no"
+    if (response === 'yes' || response === 'no') {
+      if (currentIndex < outfits.length - 1) {
+        setCurrentIndex(currentIndex + 1);
+      }
+    }
+    // For "partial", stay on the card and let user pick items
+  };
+
+  const handlePartialItemSelect = (outfitId: number, item: string) => {
+    const prevParts = responses[outfitId]?.parts || [];
+    const isSelected = prevParts.includes(item);
+    const newParts = isSelected
+      ? prevParts.filter(i => i !== item)
+      : [...prevParts, item];
+
+    setResponses(prev => ({
+      ...prev,
+      [outfitId]: { response: 'partial', parts: newParts }
+    }));
+
+    // If this is the first item being selected, advance to next card
+    if (!isSelected && prevParts.length === 0 && currentIndex < outfits.length - 1) {
+      setTimeout(() => setCurrentIndex(currentIndex + 1), 300); // slight delay for feedback
+    }
   };
 
   const handleSubmit = async () => {
@@ -77,79 +104,72 @@ const VisualOutfitTestScreen: React.FC<VisualOutfitTestScreenProps> = ({ navigat
     }
   };
 
+  const outfit = outfits[currentIndex];
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Visual Outfit Test</Text>
-      {outfits.map(outfit => (
-        <View key={outfit.id} style={styles.outfitCard}>
-          <Image source={outfit.image} style={styles.image} />
-          <Text style={styles.title}>{outfit.title}</Text>
-          <Text style={styles.style}>{outfit.style}</Text>
-          <View style={styles.buttonRow}>
-            <TouchableOpacity
-              style={[
-                styles.button,
-                responses[outfit.id]?.response === 'no' && styles.buttonSelected
-              ]}
-              onPress={() => handleResponse(outfit.id, 'no')}
-            >
-              <Text style={responses[outfit.id]?.response === 'no' ? { color: '#fff' } : { color: '#222' }}>
-                No, it's not my style
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.button,
-                responses[outfit.id]?.response === 'partial' && styles.buttonSelected
-              ]}
-              onPress={() => handleResponse(outfit.id, 'partial')}
-            >
-              <Text style={responses[outfit.id]?.response === 'partial' ? { color: '#fff' } : { color: '#222' }}>
-                I'd wear parts of it
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.button,
-                responses[outfit.id]?.response === 'yes' && styles.buttonPrimary
-              ]}
-              onPress={() => handleResponse(outfit.id, 'yes')}
-            >
-              <Text style={responses[outfit.id]?.response === 'yes' ? { color: '#fff' } : { color: '#222' }}>
-                Yes, I would wear it all
-              </Text>
-            </TouchableOpacity>
-          </View>
-          {responses[outfit.id]?.response === 'partial' && (
-            <View style={styles.refineRow}>
-              {outfit.items.map(item => (
-                <TouchableOpacity
-                  key={item}
-                  style={[
-                    styles.refineButton,
-                    responses[outfit.id]?.parts?.includes(item) && styles.refineButtonSelected
-                  ]}
-                  onPress={() => {
-                    const prev = responses[outfit.id]?.parts || [];
-                    handleResponse(
-                      outfit.id,
-                      'partial',
-                      prev.includes(item)
-                        ? prev.filter(i => i !== item)
-                        : [...prev, item]
-                    );
-                  }}
-                >
-                  <Text>{item}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
+      <View style={styles.outfitCard}>
+        <Image source={outfit.image} style={styles.image} />
+        <Text style={styles.title}>{outfit.title}</Text>
+        <Text style={styles.style}>{outfit.style}</Text>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity
+            style={[
+              styles.button,
+              responses[outfit.id]?.response === 'no' && styles.buttonSelected
+            ]}
+            onPress={() => handleResponse(outfit.id, 'no')}
+          >
+            <Text style={responses[outfit.id]?.response === 'no' ? { color: '#fff' } : { color: '#222' }}>
+              No, it's not my style
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.button,
+              responses[outfit.id]?.response === 'partial' && styles.buttonSelected
+            ]}
+            onPress={() => handleResponse(outfit.id, 'partial')}
+          >
+            <Text style={responses[outfit.id]?.response === 'partial' ? { color: '#fff' } : { color: '#222' }}>
+              I'd wear parts of it
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.button,
+              responses[outfit.id]?.response === 'yes' && styles.buttonPrimary
+            ]}
+            onPress={() => handleResponse(outfit.id, 'yes')}
+          >
+            <Text style={responses[outfit.id]?.response === 'yes' ? { color: '#fff' } : { color: '#222' }}>
+              Yes, I would wear it all
+            </Text>
+          </TouchableOpacity>
         </View>
-      ))}
-      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={{ color: '#fff', fontWeight: 'bold' }}>Submit</Text>
-      </TouchableOpacity>
+        {responses[outfit.id]?.response === 'partial' && (
+          <View style={styles.refineRow}>
+            {outfit.items.map(item => (
+              <TouchableOpacity
+                key={item}
+                style={[
+                  styles.refineButton,
+                  responses[outfit.id]?.parts?.includes(item) && styles.refineButtonSelected
+                ]}
+                onPress={() => handlePartialItemSelect(outfit.id, item)}
+              >
+                <Text>{item}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+      </View>
+      {currentIndex === outfits.length - 1 && (
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <Text style={{ color: '#fff', fontWeight: 'bold' }}>Submit</Text>
+        </TouchableOpacity>
+      )}
     </ScrollView>
   );
 };
@@ -178,7 +198,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 160,
+    height: 400,
     borderRadius: 8,
     marginBottom: 8,
   },
