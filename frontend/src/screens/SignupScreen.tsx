@@ -22,7 +22,7 @@ const SignupScreen = () => {
       await AsyncStorage.setItem('token', res.data.token);
       setEmail('');
       setPassword('');
-      navigation.navigate('StyleQuiz');
+      navigation.navigate('ProfileInfo');
     } catch (err: any) {
       Alert.alert('Error', err.response?.data?.message || 'Registration failed');
     } finally {

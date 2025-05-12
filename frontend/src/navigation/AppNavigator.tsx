@@ -6,6 +6,7 @@ import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import StyleQuizStack from './StyleQuizStack';
 import VisualOutfitTestScreen from '../screens/VisualOutfitTestScreen';
+import ProfileInfoScreen from '../screens/ProfileInfoScreen';
 import type { AuthStackParamList, RootStackParamList } from './types';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -18,6 +19,7 @@ const AppNavigator = () => (
     <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
     <Stack.Screen name="StyleQuiz" component={StyleQuizStack} options={{ headerShown: false }} />
     <Stack.Screen name="VisualOutfitTest" component={VisualOutfitTestScreen} />
+    <Stack.Screen name="ProfileInfo" component={ProfileInfoScreen} />
   </Stack.Navigator>
 );
 

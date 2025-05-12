@@ -7,6 +7,10 @@ const userSchema = new mongoose.Schema({
   resetPasswordExpires: Date,
   styleQuiz: mongoose.Schema.Types.Mixed,
   outfitTest: mongoose.Schema.Types.Mixed,
+  firstName: String,
+  lastName: String,
+  age: Number,
+  gender: String,
   // Add more fields as needed (name, etc.)
 });
 

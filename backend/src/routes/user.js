@@ -15,5 +15,16 @@ router.post('/outfit-test', authMiddleware, async (req, res) => {
       res.status(500).json({ error: 'Server error' });
     }
   });
-  
+
+router.post('/profile-info', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { firstName, lastName, age, gender } = req.body;
+    await User.findByIdAndUpdate(userId, { firstName, lastName, age, gender });
+    res.json({ message: 'Profile info saved!' });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;

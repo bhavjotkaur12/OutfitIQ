@@ -4,6 +4,7 @@ export type AuthStackParamList = {
     ForgotPassword: undefined;
     ResetPassword: { token: string } | undefined;
     StyleQuiz: undefined;
+    ProfileInfo: undefined;
   };
 
 export type StyleQuizStackParamList = {
@@ -35,5 +36,6 @@ export type RootStackParamList = {
   StyleQuiz: undefined;
   VisualOutfitTest: undefined;
   StyleProfileSummary: undefined;
+  ProfileInfo: undefined;
   // ...add any other screens here
 };
