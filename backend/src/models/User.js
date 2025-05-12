@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   styleQuiz: mongoose.Schema.Types.Mixed,
+  outfitTest: mongoose.Schema.Types.Mixed,
   // Add more fields as needed (name, etc.)
 });
 

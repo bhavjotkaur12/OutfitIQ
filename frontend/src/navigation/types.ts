@@ -26,3 +26,14 @@ export type StyleQuizStackParamList = {
   Step5OutfitPreferences: any;
   QuizSummary: any;
 };
+
+export type RootStackParamList = {
+  Login: undefined;
+  Signup: undefined;
+  ForgotPassword: undefined;
+  ResetPassword: { token: string } | undefined;
+  StyleQuiz: undefined;
+  VisualOutfitTest: undefined;
+  StyleProfileSummary: undefined;
+  // ...add any other screens here
+};

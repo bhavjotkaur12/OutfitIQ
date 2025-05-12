@@ -21,7 +21,7 @@ const QuizSummary: React.FC<QuizSummaryProps> = ({ navigation, route }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       Alert.alert('Success', 'Your style profile has been saved!');
-      // navigation.navigate('VisualOutfitTest');
+      navigation.getParent()?.navigate('VisualOutfitTest');
     } catch (err: any) {
       Alert.alert('Error', err.response?.data?.message || 'Something went wrong');
     }
