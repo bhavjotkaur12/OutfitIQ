@@ -1,0 +1,252 @@
+[
+    {
+      "id": 1,
+      "imageUrl": "/public/outfits/Outfit1.png",
+      "title": "Grunge Layered",
+      "styles": ["Grunge", "Streetwear"],
+      "gender": "Female",
+      "season": "Fall",
+      "colorPalette": ["#222222", "#B22222", "#696969"],
+      "items": ["Jacket", "Plaid Skirt", "T-shirt"]
+    },
+    {
+      "id": 2,
+      "imageUrl": "/public/outfits/Outfit2.png",
+      "title": "Minimalist Chic",
+      "styles": ["Minimalistic", "Chic"],
+      "gender": "Unisex",
+      "season": "Spring",
+      "colorPalette": ["#FFFFFF", "#B0B0B0", "#222222"],
+      "items": ["Coat", "Trousers", "Sneakers"]
+    },
+    {
+      "id": 3,
+      "imageUrl": "/public/outfits/Outfit3.png",
+      "title": "Classic Business",
+      "styles": ["Business", "Classic"],
+      "gender": "Male",
+      "season": "All-Season",
+      "colorPalette": ["#1A237E", "#FFFFFF", "#222222"],
+      "items": ["Blazer", "Dress Shirt", "Oxfords"]
+    },
+    {
+      "id": 4,
+      "imageUrl": "/public/outfits/Outfit4.png",
+      "title": "Bohemian Summer",
+      "styles": ["Bohemian", "Casual"],
+      "gender": "Female",
+      "season": "Summer",
+      "colorPalette": ["#FFD700", "#FFB6C1", "#8FBC8F"],
+      "items": ["Maxi Skirt", "Top", "Earrings"]
+    },
+    {
+      "id": 5,
+      "imageUrl": "/public/outfits/Outfit5.png",
+      "title": "Sporty Street",
+      "styles": ["Sporty", "Streetwear"],
+      "gender": "Unisex",
+      "season": "All-Season",
+      "colorPalette": ["#4C6FFF", "#FFD93B", "#222222"],
+      "items": ["Hoodie", "Joggers", "Sneakers"]
+    },
+    {
+      "id": 6,
+      "imageUrl": "/public/outfits/Outfit6.png",
+      "title": "Preppy Layers",
+      "styles": ["Preppy", "Classic"],
+      "gender": "Male",
+      "season": "Fall",
+      "colorPalette": ["#1976D2", "#F5F5F5", "#FFD700"],
+      "items": ["Sweater Vest", "Button Down", "Loafers"]
+    },
+    {
+      "id": 7,
+      "imageUrl": "/public/outfits/Outfit7.png",
+      "title": "Edgy Night Out",
+      "styles": ["Edgy", "Chic"],
+      "gender": "Female",
+      "season": "Winter",
+      "colorPalette": ["#222222", "#FFD700", "#B0B0B0"],
+      "items": ["Leather Jacket", "Mini Skirt", "Heeled Boots"]
+    },
+    {
+      "id": 8,
+      "imageUrl": "/public/outfits/Outfit8.png",
+      "title": "Vintage Denim",
+      "styles": ["Vintage", "Casual"],
+      "gender": "Unisex",
+      "season": "Spring",
+      "colorPalette": ["#3B3B98", "#FFFFFF", "#A0522D"],
+      "items": ["Denim Jacket", "Graphic Tee", "High-Waisted Jeans"]
+    },
+    {
+      "id": 9,
+      "imageUrl": "/public/outfits/Outfit9.png",
+      "title": "Glam Party",
+      "styles": ["Glam", "Trendy"],
+      "gender": "Female",
+      "season": "Winter",
+      "colorPalette": ["#FFD700", "#FFB6C1", "#222222"],
+      "items": ["Sequin Dress", "Heels", "Clutch"]
+    },
+    {
+      "id": 10,
+      "imageUrl": "/public/outfits/Outfit10.png",
+      "title": "Relaxed Weekend",
+      "styles": ["Relaxed", "Minimalistic"],
+      "gender": "Male",
+      "season": "Summer",
+      "colorPalette": ["#F5F5F5", "#222222", "#4CFF88"],
+      "items": ["Sweatshirt", "Shorts", "Slip-ons"]
+    },
+    {
+      "id": 11,
+      "imageUrl": "/public/outfits/Outfit11.png",
+      "title": "Punk Revival",
+      "styles": ["Punk", "Grunge"],
+      "gender": "Unisex",
+      "season": "Fall",
+      "colorPalette": ["#222222", "#FF4C4C", "#B0B0B0"],
+      "items": ["Band Tee", "Ripped Jeans", "Combat Boots"]
+    },
+    {
+      "id": 12,
+      "imageUrl": "/public/outfits/Outfit12.png",
+      "title": "Artsy Layers",
+      "styles": ["Artsy", "Bohemian"],
+      "gender": "Female",
+      "season": "Spring",
+      "colorPalette": ["#A259FF", "#FFD93B", "#43E97B"],
+      "items": ["Patterned Scarf", "Oversized Sweater", "Wide-Leg Pants"]
+    },
+    {
+      "id": 13,
+      "imageUrl": "/public/outfits/Outfit13.png",
+      "title": "Business Casual",
+      "styles": ["Business", "Casual"],
+      "gender": "Male",
+      "season": "All-Season",
+      "colorPalette": ["#1976D2", "#F5F5F5", "#222222"],
+      "items": ["Polo Shirt", "Chinos", "Dress Shoes"]
+    },
+    {
+      "id": 14,
+      "imageUrl": "/public/outfits/Outfit14.png",
+      "title": "Preppy Skirt",
+      "styles": ["Preppy", "Chic"],
+      "gender": "Female",
+      "season": "Spring",
+      "colorPalette": ["#FFB6C1", "#FFD700", "#FFFFFF"],
+      "items": ["Cardigan", "Pleated Skirt", "Ballet Flats"]
+    },
+    {
+      "id": 15,
+      "imageUrl": "/public/outfits/Outfit15.png",
+      "title": "Streetwear Bold",
+      "styles": ["Streetwear", "Trendy"],
+      "gender": "Unisex",
+      "season": "Fall",
+      "colorPalette": ["#FF4C4C", "#FFD93B", "#222222"],
+      "items": ["Oversized Tee", "Cargo Pants", "Chunky Sneakers"]
+    },
+    {
+      "id": 16,
+      "imageUrl": "/public/outfits/Outfit16.png",
+      "title": "Classic Suit",
+      "styles": ["Classic", "Business"],
+      "gender": "Male",
+      "season": "Winter",
+      "colorPalette": ["#222222", "#FFFFFF", "#1A237E"],
+      "items": ["Suit Jacket", "Dress Pants", "Tie"]
+    },
+    {
+      "id": 17,
+      "imageUrl": "/public/outfits/Outfit17.png",
+      "title": "Glamorous Evening",
+      "styles": ["Glam", "Chic"],
+      "gender": "Female",
+      "season": "Winter",
+      "colorPalette": ["#FFD700", "#A259FF", "#222222"],
+      "items": ["Gown", "Stilettos", "Statement Earrings"]
+    },
+    {
+      "id": 18,
+      "imageUrl": "/public/outfits/Outfit18.png",
+      "title": "Athleisure Day",
+      "styles": ["Athleisure", "Sporty"],
+      "gender": "Unisex",
+      "season": "All-Season",
+      "colorPalette": ["#28C7FA", "#43E97B", "#222222"],
+      "items": ["Track Jacket", "Leggings", "Running Shoes"]
+    },
+    {
+      "id": 19,
+      "imageUrl": "/public/outfits/Outfit19.png",
+      "title": "Vintage Picnic",
+      "styles": ["Vintage", "Preppy"],
+      "gender": "Female",
+      "season": "Summer",
+      "colorPalette": ["#FFD700", "#FFB6C1", "#FFFFFF"],
+      "items": ["Polka Dot Dress", "Sun Hat", "Mary Janes"]
+    },
+    {
+      "id": 20,
+      "imageUrl": "/public/outfits/Outfit20.png",
+      "title": "Minimalist Monochrome",
+      "styles": ["Minimalistic", "Classic"],
+      "gender": "Unisex",
+      "season": "All-Season",
+      "colorPalette": ["#FFFFFF", "#222222", "#B0B0B0"],
+      "items": ["White Shirt", "Black Trousers", "Loafers"]
+    },
+    {
+      "id": 21,
+      "imageUrl": "/public/outfits/Outfit21.png",
+      "title": "Boho Festival",
+      "styles": ["Bohemian", "Trendy"],
+      "gender": "Female",
+      "season": "Summer",
+      "colorPalette": ["#FFD700", "#43E97B", "#FFB6C1"],
+      "items": ["Fringe Vest", "Floral Dress", "Ankle Boots"]
+    },
+    {
+      "id": 22,
+      "imageUrl": "/public/outfits/Outfit22.png",
+      "title": "Edgy Urban",
+      "styles": ["Edgy", "Streetwear"],
+      "gender": "Male",
+      "season": "Fall",
+      "colorPalette": ["#222222", "#FFD700", "#B0B0B0"],
+      "items": ["Bomber Jacket", "Black Jeans", "High Tops"]
+    },
+    {
+      "id": 23,
+      "imageUrl": "/public/outfits/Outfit23.png",
+      "title": "Classic Cardigan",
+      "styles": ["Classic", "Preppy"],
+      "gender": "Unisex",
+      "season": "Spring",
+      "colorPalette": ["#F5F5F5", "#1976D2", "#FFD700"],
+      "items": ["Cardigan", "Oxford Shirt", "Khakis"]
+    },
+    {
+      "id": 24,
+      "imageUrl": "/public/outfits/Outfit24.png",
+      "title": "Chic Brunch",
+      "styles": ["Chic", "Minimalistic"],
+      "gender": "Female",
+      "season": "Spring",
+      "colorPalette": ["#FFB6C1", "#F5F5F5", "#222222"],
+      "items": ["Blouse", "Culottes", "Mules"]
+    },
+    {
+      "id": 25,
+      "imageUrl": "/public/outfits/Outfit25.png",
+      "title": "Sporty Layers",
+      "styles": ["Sporty", "Casual"],
+      "gender": "Male",
+      "season": "Winter",
+      "colorPalette": ["#4C6FFF", "#222222", "#FFD93B"],
+      "items": ["Windbreaker", "Joggers", "Trainers"]
+    }
+  ] 

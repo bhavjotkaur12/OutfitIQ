@@ -3,6 +3,8 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const authMiddleware = require('../middleware/auth'); // If you want to require login
 const User = require('../models/User');
+const path = require('path');
+const outfits = require('../../data/outfits.json'); // adjust path as needed
 
 router.post('/style-quiz', authMiddleware, userController.saveStyleQuiz);
 router.post('/outfit-test', authMiddleware, async (req, res) => {
@@ -74,6 +76,33 @@ router.get('/profile', authMiddleware, async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
+});
+
+// Filtering function
+function filterOutfitsForUser(userQuiz, userGender) {
+  return outfits.filter(outfit =>
+    outfit.styles.some(style => userQuiz.styleTypes.includes(style)) &&
+    (outfit.gender === userGender || outfit.gender === 'Unisex')
+  );
+}
+
+// API endpoint
+router.get('/visual-test-outfits', authMiddleware, async (req, res) => {
+  const user = await User.findById(req.user.id);
+  const userQuiz = user.styleQuiz; // or wherever you store quiz answers
+  const userGender = user.gender;
+
+  let filtered = filterOutfitsForUser(userQuiz, userGender);
+
+  // Add randoms for diversity if needed
+  if (filtered.length < 10) {
+    const randoms = outfits.filter(o => !filtered.includes(o));
+    while (filtered.length < 10 && randoms.length) {
+      filtered.push(randoms.pop());
+    }
+  }
+
+  res.json(filtered.slice(0, 10));
 });
 
 module.exports = router;

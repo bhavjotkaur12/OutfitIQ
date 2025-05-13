@@ -5,6 +5,7 @@ require('dotenv').config();
 const session = require('express-session');
 const passport = require('passport');
 require('./config/passport'); // Make sure to require your passport config
+const path = require('path');
 
 const app = express();
 
@@ -20,6 +21,10 @@ app.use(passport.session());
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/user', require('./routes/user'));
+
+console.log('Serving static files from:', path.join(process.cwd(), 'public'));
+
+app.use('/public', express.static(path.join(process.cwd(), 'public')));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
