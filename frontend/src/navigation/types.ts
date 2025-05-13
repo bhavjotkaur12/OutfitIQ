@@ -5,27 +5,40 @@ export type AuthStackParamList = {
     ResetPassword: { token: string } | undefined;
     StyleQuiz: undefined;
     ProfileInfo: undefined;
+    Profile: undefined;
   };
 
+type StyleQuizParams = {
+  weight: string;
+  gender: string;
+  styleGoals: string;
+  location: string;
+  age: string;
+  firstName: string;
+  lastName: string;
+  height?: string;
+  build?: string;
+  bodyType?: string;
+  fit?: string;
+  preferredColors?: string[];
+  avoidColors?: string;
+  styleTypes?: string[];
+  brands?: string;
+  influences?: string;
+  comfort?: string;
+  activities?: string[];
+  denim?: string[];
+  outerwear?: string[];
+  dressTop?: string[];
+};
+
 export type StyleQuizStackParamList = {
-  Step1BodyType: undefined;
-  Step2ColorPreferences: {
-    height: string;
-    build: string;
-    bodyType: string;
-    fit: string;
-  };
-  Step3StyleType: {
-    height: string;
-    build: string;
-    bodyType: string;
-    fit: string;
-    preferredColors: string[];
-    avoidColors: string;
-  };
-  Step4ComfortLifestyle: any; // Add correct types as you go
-  Step5OutfitPreferences: any;
-  QuizSummary: any;
+  Step1BodyType: StyleQuizParams;
+  Step2ColorPreferences: StyleQuizParams;
+  Step3StyleType: StyleQuizParams;
+  Step4ComfortLifestyle: StyleQuizParams;
+  Step5OutfitPreferences: StyleQuizParams;
+  QuizSummary: StyleQuizParams;
 };
 
 export type RootStackParamList = {
@@ -33,9 +46,13 @@ export type RootStackParamList = {
   Signup: undefined;
   ForgotPassword: undefined;
   ResetPassword: { token: string } | undefined;
-  StyleQuiz: undefined;
+  StyleQuiz: {
+    screen?: keyof StyleQuizStackParamList;
+    params?: Partial<StyleQuizStackParamList[keyof StyleQuizStackParamList]>;
+  };
   VisualOutfitTest: undefined;
   StyleProfileSummary: undefined;
   ProfileInfo: undefined;
+  Profile: undefined;
   // ...add any other screens here
 };

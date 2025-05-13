@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export type RootStackParamList = {
   VisualOutfitTest: undefined;
   StyleProfileSummary: undefined;
+  Profile: undefined;
   // ...other screens
 };
 
@@ -98,7 +99,7 @@ const VisualOutfitTestScreen: React.FC<VisualOutfitTestScreenProps> = ({ navigat
         }
       );
       Alert.alert('Success', 'Your outfit test has been submitted!');
-      //navigation.navigate('StyleProfileSummary');
+      navigation.navigate('Profile');
     } catch (error) {
       console.error('Failed to submit outfit test:', error);
       Alert.alert('Error', 'Failed to submit your outfit test. Please try again.');

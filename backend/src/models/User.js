@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema({
   lastName: String,
   age: Number,
   gender: String,
+  avatarUrl: String,
+  styleProfile: mongoose.Schema.Types.Mixed,
 
   // Add more fields as needed (name, etc.)
 });
