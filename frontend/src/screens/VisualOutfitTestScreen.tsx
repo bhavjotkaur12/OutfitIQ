@@ -89,7 +89,7 @@ const VisualOutfitTestScreen: React.FC<VisualOutfitTestScreenProps> = ({ navigat
     try {
       const token = await AsyncStorage.getItem('token');
       await axios.post(
-        'http://10.0.2.2:5000/api/user/outfit-test',
+        'http://10.0.2.2:3000/api/user/outfit-test',
         { responses },
         {
           headers: {

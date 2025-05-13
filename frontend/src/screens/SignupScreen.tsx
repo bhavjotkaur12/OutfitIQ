@@ -16,15 +16,26 @@ const SignupScreen = () => {
   const handleSignup = async () => {
     setLoading(true);
     try {
-      await axios.post('http://10.0.2.2:5000/api/auth/register', { email, password });
+      console.log('Attempting registration with:', { email, password });
+      const response = await axios.post('http://10.0.2.2:3000/api/auth/register', { email, password });
+      console.log('Registration response:', response.data);
+      
       // Automatically log in after signup
-      const res = await axios.post('http://10.0.2.2:5000/api/auth/login', { email, password });
-      await AsyncStorage.setItem('token', res.data.token);
+      const loginRes = await axios.post('http://10.0.2.2:3000/api/auth/login', { email, password });
+      console.log('Login response:', loginRes.data);
+      
+      await AsyncStorage.setItem('token', loginRes.data.token);
       setEmail('');
       setPassword('');
       navigation.navigate('ProfileInfo');
     } catch (err: any) {
-      Alert.alert('Error', err.response?.data?.message || 'Registration failed');
+      console.error('Full error:', err);
+      console.error('Error response:', err.response?.data);
+      console.error('Error status:', err.response?.status);
+      Alert.alert(
+        'Error',
+        `Registration failed: ${err.response?.data?.message || err.message || 'Unknown error'}`
+      );
     } finally {
       setLoading(false);
     }

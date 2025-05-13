@@ -10,7 +10,7 @@ const ResetPasswordScreen = ({ route, navigation }: { route: any, navigation: an
   const handleResetPassword = async () => {
     setLoading(true);
     try {
-      await axios.post('http://10.0.2.2:5000/api/auth/reset-password', { token, password });
+      await axios.post('http://10.0.2.2:3000/api/auth/reset-password', { token, password });
       Alert.alert('Success', 'Your password has been reset.');
       setPassword('');
       navigation.navigate('Login');

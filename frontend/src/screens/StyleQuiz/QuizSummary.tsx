@@ -16,7 +16,7 @@ const QuizSummary: React.FC<QuizSummaryProps> = ({ navigation, route }) => {
     try {
       const token = await AsyncStorage.getItem('token');
       await axios.post(
-        'http://10.0.2.2:5000/api/user/style-quiz',
+        'http://10.0.2.2:3000/api/user/style-quiz',
         { ...route.params },
         { headers: { Authorization: `Bearer ${token}` } }
       );

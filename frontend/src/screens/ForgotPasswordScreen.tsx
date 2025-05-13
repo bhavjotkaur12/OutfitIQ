@@ -9,7 +9,7 @@ const ForgotPasswordScreen = ({ navigation }: { navigation: any }) => {
   const handleForgotPassword = async () => {
     setLoading(true);
     try {
-      await axios.post('http://10.0.2.2:5000/api/auth/forgot-password', { email });
+      await axios.post('http://10.0.2.2:3000/api/auth/forgot-password', { email });
       Alert.alert('Check your email', 'If an account exists, you will receive a password reset link.');
       setEmail('');
       navigation.goBack();

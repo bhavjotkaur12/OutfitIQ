@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   lastName: String,
   age: Number,
   gender: String,
+
   // Add more fields as needed (name, etc.)
 });
 

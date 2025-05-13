@@ -18,8 +18,8 @@ const AppNavigator = () => (
     <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />   
     <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
     <Stack.Screen name="StyleQuiz" component={StyleQuizStack} options={{ headerShown: false }} />
-    <Stack.Screen name="VisualOutfitTest" component={VisualOutfitTestScreen} />
-    <Stack.Screen name="ProfileInfo" component={ProfileInfoScreen} />
+    <Stack.Screen name="VisualOutfitTest" component={VisualOutfitTestScreen} options={{title: 'Visual Outfit Test'}} />
+    <Stack.Screen name="ProfileInfo" component={ProfileInfoScreen} options={{title: 'Profile Information'}} />
   </Stack.Navigator>
 );
 
