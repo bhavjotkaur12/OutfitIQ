@@ -22,7 +22,7 @@ const LoginScreen = () => {
       Alert.alert('Success', 'Login successful!');
       setEmail('');
       setPassword('');
-      // Navigate to the next screen (e.g., Home)
+      navigation.navigate('Home');
     } catch (err: any) {
       Alert.alert('Error', err.response?.data?.message || 'Login failed');
     } finally {

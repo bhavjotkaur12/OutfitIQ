@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView, Modal, Pressable } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView, Modal, Pressable, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../navigation/types';
+
+type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Profile'>;
 
 const ProfileScreen = () => {
   const [profile, setProfile] = useState<any>(null);
@@ -10,6 +15,7 @@ const ProfileScreen = () => {
   const [showColorModal, setShowColorModal] = useState(false);
   const [showBrandsModal, setShowBrandsModal] = useState(false);
   const [showCategoriesModal, setShowCategoriesModal] = useState(false);
+  const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -22,6 +28,28 @@ const ProfileScreen = () => {
     };
     fetchProfile();
   }, []);
+
+  const handleSubmit = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      await axios.post(
+        'http://10.0.2.2:3000/api/user/profile',
+        {
+          styleSummary: profile.styleSummary,
+          categories: profile.categories,
+          colors: profile.colors,
+          brands: profile.brands
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+      
+      navigation.navigate('Home');
+    } catch (error) {
+      Alert.alert('Error', 'Failed to save profile');
+    }
+  };
 
   if (loading) return <ActivityIndicator size="large" />;
 
@@ -59,7 +87,7 @@ const ProfileScreen = () => {
       <TouchableOpacity style={styles.editBtn}>
         <Text style={styles.editText}>Edit Preferences</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.saveBtn}>
+      <TouchableOpacity style={styles.saveBtn} onPress={handleSubmit}>
         <Text style={styles.saveText}>Save Profile</Text>
       </TouchableOpacity>
       <Modal

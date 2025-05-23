@@ -1,3 +1,5 @@
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
 export type AuthStackParamList = {
     Login: undefined;
     Signup: undefined;
@@ -6,6 +8,7 @@ export type AuthStackParamList = {
     StyleQuiz: undefined;
     ProfileInfo: undefined;
     Profile: undefined;
+    Home: undefined;
   };
 
 type StyleQuizParams = {
@@ -54,5 +57,11 @@ export type RootStackParamList = {
   StyleProfileSummary: undefined;
   ProfileInfo: undefined;
   Profile: undefined;
-  // ...add any other screens here
+  Home: undefined;
 };
+
+// Make sure to export this type
+export type ProfileScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Profile'
+>;

@@ -71,7 +71,17 @@ router.get('/profile', authMiddleware, async (req, res) => {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    const profile = generateStyleProfile(user);
+    const profile = {
+      name: user.firstName ? `${user.firstName} ${user.lastName}` : user.email,
+      avatarUrl: user.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.firstName || user.email)}`,
+      styleSummary: user.styleQuiz?.styleTypes?.[0] || 'Classic Chic',
+      categories: user.styleQuiz?.styleTypes || ['Casual', 'Chic'],
+      colors: user.styleQuiz?.preferredColors || ['Black', 'White', 'Blue'],
+      brands: user.styleQuiz?.brands || [],
+      // Add the activities from styleQuiz
+      activities: user.styleQuiz?.activities || []
+    };
+
     res.json(profile);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
@@ -103,6 +113,27 @@ router.get('/visual-test-outfits', authMiddleware, async (req, res) => {
   }
 
   res.json(filtered.slice(0, 10));
+});
+
+router.post('/recommendations', authMiddleware, async (req, res) => {
+  try {
+    const { occasion, weather, comfortLevel } = req.body;
+    const user = await User.findById(req.user.id);
+    
+    // Filter outfits based on user preferences and input
+    const recommendations = outfits.filter(outfit => {
+      // Add your filtering logic here based on:
+      // - user.styleQuiz preferences
+      // - occasion
+      // - weather
+      // - comfortLevel
+      return true; // Replace with actual filtering
+    });
+
+    res.json(recommendations.slice(0, 5)); // Return top 5 recommendations
+  } catch (error) {
+    res.status(500).json({ message: 'Error getting recommendations' });
+  }
 });
 
 module.exports = router;
