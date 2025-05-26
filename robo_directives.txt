@@ -1,0 +1,5 @@
+tap id:sign-up-button
+text id:email-input test_user@example.com
+text id:password-input TestPassword123!
+tap id:submit-signup-button
+wait 1000

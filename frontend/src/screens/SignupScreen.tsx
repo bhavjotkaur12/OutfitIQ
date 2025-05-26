@@ -53,6 +53,9 @@ const SignupScreen = () => {
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
+        testID="email-input"
+        accessibilityLabel="Email input"
+        accessibilityHint="Enter your email address"
       />
       <Text style={styles.helper}>Please enter your email address</Text>
       <Text style={styles.label}>Password</Text>
@@ -62,15 +65,36 @@ const SignupScreen = () => {
         value={password}
         onChangeText={setPassword}
         secureTextEntry
+        testID="password-input"
+        accessibilityLabel="Password input"
+        accessibilityHint="Enter your password"
       />
       <Text style={styles.helper}>At least 8 characters</Text>
-      <TouchableOpacity style={styles.signUpBtn} onPress={handleSignup} disabled={loading}>
+      <TouchableOpacity
+        style={styles.signUpBtn}
+        onPress={handleSignup}
+        disabled={loading}
+        testID="sign-up-button"
+        accessibilityLabel="Sign up button"
+        accessibilityHint="Click to create your account"
+      >
         <Text style={styles.signUpText}>{loading ? 'Signing Up...' : 'Sign Up'}</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.loginLink} onPress={() => navigation.navigate('Login')}>
+      <TouchableOpacity 
+        style={styles.loginLink} 
+        onPress={() => navigation.navigate('Login')}
+        testID="login-link"
+        accessibilityLabel="Login link"
+        accessibilityHint="Already have an account? Click to login"
+      >
         <Text style={styles.loginLinkText}>Already have an account? Login</Text>
       </TouchableOpacity>
-      <GoogleSignInButton title="Sign Up with Google" style={{ marginTop: 24 }} />
+      <GoogleSignInButton 
+        title="Sign Up with Google" 
+        style={{ marginTop: 24 }}
+        testID="google-signup-button"
+        accessibilityLabel="Sign up with Google"
+      />
     </View>
   );
 };
