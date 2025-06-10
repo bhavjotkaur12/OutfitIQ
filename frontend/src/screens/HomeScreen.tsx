@@ -35,6 +35,7 @@ const HomeScreen = () => {
   const [userOccasions, setUserOccasions] = useState<string[]>([]);
   const [location, setLocation] = useState<{lat: number; lon: number} | null>(null);
   const [loadingWeather, setLoadingWeather] = useState(false);
+  const [formality, setFormality] = useState('');
 
   // Updated emoji mapping with more relevant icons
   const occasionEmojis: { [key: string]: string } = {
@@ -110,11 +111,11 @@ const HomeScreen = () => {
         description: weatherResponse.data.weather[0].main,
         icon: weatherResponse.data.weather[0].icon,
         city: weatherResponse.data.name,
-        region: region.includes('Province') ? region.split(' ')[0] : region // Clean up "Ontario Province" to just "Ontario"
+        region: region.includes('Province') ? region.split(' ')[0] : region 
       };
       
-      console.log('Location data:', geoResponse.data[0]); // Debug log
-      console.log('Weather data:', weatherResponse.data); // Debug log
+      console.log('Location data:', geoResponse.data[0]); 
+      console.log('Weather data:', weatherResponse.data); 
       
       setWeather(weatherData);
     } catch (error) {
@@ -142,6 +143,7 @@ const HomeScreen = () => {
   const fetchUserProfile = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
+      console.log('Token from AsyncStorage:', token);
       const response = await axios.get('http://10.0.2.2:3000/api/user/profile', {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -172,7 +174,8 @@ const HomeScreen = () => {
         {
           occasion: selectedOccasion,
           weather,
-          comfortLevel
+          comfortLevel,
+          formality,
         },
         {
           headers: { Authorization: `Bearer ${token}` }
@@ -283,6 +286,25 @@ const HomeScreen = () => {
                 onPress={() => setComfortLevel(level)}
               >
                 <Text style={styles.comfortText}>{level}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        {/* Formality Level Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Formality Level</Text>
+          <View style={styles.formalityContainer}>
+            {['Casual', 'Semi-formal', 'Formal'].map((level) => (
+              <TouchableOpacity
+                key={level}
+                style={[
+                  styles.formalityButton,
+                  formality === level && styles.selectedFormality
+                ]}
+                onPress={() => setFormality(level)}
+              >
+                <Text style={styles.formalityText}>{level}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -485,6 +507,32 @@ const styles = StyleSheet.create({
   bottomIconButton: {
     padding: 16,
     marginHorizontal: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  formalityContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 24,
+  },
+  formalityButton: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+    padding: 12,
+    borderRadius: 8,
+    marginHorizontal: 4,
+    alignItems: 'center',
+  },
+  selectedFormality: {
+    backgroundColor: '#e0e0e0',
+    borderWidth: 2,
+    borderColor: '#000',
+  },
+  formalityText: {
+    fontWeight: '500',
   },
 });
 

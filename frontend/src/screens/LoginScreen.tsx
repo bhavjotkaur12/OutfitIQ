@@ -5,6 +5,7 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import type { AuthStackParamList } from '../navigation/types';
 import axios from 'axios';
 import GoogleSignInButton from '../components/GoogleSignInButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
   const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
@@ -19,6 +20,8 @@ const LoginScreen = () => {
         email,
         password,
       });
+      await AsyncStorage.setItem('token', res.data.token);
+
       Alert.alert('Success', 'Login successful!');
       setEmail('');
       setPassword('');
