@@ -9,6 +9,8 @@ import VisualOutfitTestScreen from '../screens/VisualOutfitTestScreen';
 import ProfileInfoScreen from '../screens/ProfileInfoScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import HomeScreen from '../screens/HomeScreen';
+import RecommendationScreen from '../screens/RecommendationScreen';
+import VirtualClosetScreen from '../screens/VirtualClosetScreen';
 import type { AuthStackParamList, RootStackParamList } from './types';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -24,6 +26,21 @@ const AppNavigator = () => (
     <Stack.Screen name="ProfileInfo" component={ProfileInfoScreen} options={{title: 'Profile Information'}} />
     <Stack.Screen name="Profile" component={ProfileScreen} options={{title: 'Profile'}} />
     <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}} />
+    <Stack.Screen 
+      name="Recommendations" 
+      component={RecommendationScreen} 
+      options={{
+        title: 'Recommendations',
+        headerShown: true
+      }} 
+    />
+    <Stack.Screen 
+      name="VirtualCloset" 
+      component={VirtualClosetScreen}
+      options={{
+        headerShown: false
+      }}
+    />
   </Stack.Navigator>
 );
 

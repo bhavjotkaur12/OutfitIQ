@@ -6,6 +6,8 @@ const session = require('express-session');
 const passport = require('passport');
 require('./config/passport'); // Make sure to require your passport config
 const path = require('path');
+const recommendationsRouter = require('./routes/recommendations');
+const closetRoutes = require('./routes/closet');
 
 const app = express();
 
@@ -21,6 +23,8 @@ app.use(passport.session());
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/user', require('./routes/user'));
+app.use('/api', recommendationsRouter);
+app.use('/api/closet', closetRoutes);
 
 console.log('Serving static files from:', path.join(process.cwd(), 'public'));
 

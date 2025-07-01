@@ -16,6 +16,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Geolocation from '@react-native-community/geolocation';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../navigation/types';
 
 // Add this interface at the top of your file, after imports
 interface WeatherData {
@@ -36,6 +39,7 @@ const HomeScreen = () => {
   const [location, setLocation] = useState<{lat: number; lon: number} | null>(null);
   const [loadingWeather, setLoadingWeather] = useState(false);
   const [formality, setFormality] = useState('');
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   // Updated emoji mapping with more relevant icons
   const occasionEmojis: { [key: string]: string } = {
@@ -166,26 +170,19 @@ const HomeScreen = () => {
     }
   };
 
-  const getRecommendations = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      const response = await axios.post(
-        'http://10.0.2.2:3000/api/recommendations',
-        {
-          occasion: selectedOccasion,
-          weather,
-          comfortLevel,
-          formality,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-      );
-      // Handle recommendations
-      console.log(response.data);
-    } catch (error) {
-      console.error('Error getting recommendations:', error);
-    }
+  const getRecommendations = () => {
+    // Navigate to recommendations screen with the selected preferences
+    navigation.navigate('Recommendations', {
+      weather: weather,
+      activity: selectedOccasion,
+      comfortLevel: comfortLevel,
+      formality: formality,
+    });
+  };
+
+  // Add navigation handler for closet icon
+  const handleClosetPress = () => {
+    navigation.navigate('VirtualCloset'); // Make sure 'VirtualCloset' is defined in your navigation types
   };
 
   if (loading) {
@@ -197,7 +194,10 @@ const HomeScreen = () => {
       {/* Custom Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Outfit IQ</Text>
-        <TouchableOpacity style={styles.iconButton}>
+        <TouchableOpacity 
+          style={styles.iconButton}
+          onPress={handleClosetPress}  // Add the onPress handler
+        >
           <Icon name="checkroom" size={24} color="#000" />
         </TouchableOpacity>
       </View>

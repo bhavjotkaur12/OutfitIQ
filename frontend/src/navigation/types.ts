@@ -58,6 +58,13 @@ export type RootStackParamList = {
   ProfileInfo: undefined;
   Profile: undefined;
   Home: undefined;
+  Recommendations: {
+    weather?: any;
+    activity?: string;
+    comfortLevel?: string;
+    formality?: string;
+  };
+  VirtualCloset: undefined;
 };
 
 // Make sure to export this type
