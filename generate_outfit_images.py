@@ -6,6 +6,7 @@ from google.cloud import storage
 import requests
 from io import BytesIO
 import base64
+import os
 
 # Clothing lists (for pools)
 tops = [ 'Blazer', 'Blouse', 'Bomber', 'Button-Down', 'Cardigan', 'Flannel', 'Halter', 'Henley', 'Hoodie', 'Jacket', 'Jersey', 'Parka', 'Peacoat', 'Poncho', 'Sweater', 'Tank', 'Tee', 'Top', 'Turtleneck']
@@ -130,8 +131,15 @@ item_pools = {
 
 def pick_outfit(weather, gender, activity):
     pool = item_pools[activity][gender if gender in item_pools[activity] else 'female']
-    use_dress = 'dresses' in pool and random.choice([True, False])
-    if use_dress:
+    
+    # If pool has dresses and either doesn't have tops/bottoms or randomly choose dress
+    use_dress = ('dresses' in pool) and (
+        'tops' not in pool or 
+        'bottoms' not in pool or 
+        random.choice([True, False])
+    )
+    
+    if use_dress and 'dresses' in pool:
         dress = random.choice(pool['dresses'])
         shoes = random.choice(pool['shoes'])
         accessory = random.choice(pool['accessories'])
@@ -143,7 +151,7 @@ def pick_outfit(weather, gender, activity):
             'activity': activity,
             'weather': weather
         }
-    else:
+    elif 'tops' in pool and 'bottoms' in pool:
         top = random.choice(pool['tops'])
         bottom = random.choice(pool['bottoms'])
         shoes = random.choice(pool['shoes'])
@@ -157,10 +165,77 @@ def pick_outfit(weather, gender, activity):
             'activity': activity,
             'weather': weather
         }
+    else:
+        # Fallback to dress if no tops/bottoms available
+        if 'dresses' in pool:
+            dress = random.choice(pool['dresses'])
+            shoes = random.choice(pool['shoes'])
+            accessory = random.choice(pool['accessories'])
+            return {
+                'dress': dress,
+                'shoes': shoes,
+                'accessory': accessory,
+                'gender': gender,
+                'activity': activity,
+                'weather': weather
+            }
+        else:
+            # If we get here, something is wrong with the pool configuration
+            print(f"Warning: Invalid pool configuration for {activity}/{gender}")
+            print(f"Available items: {pool.keys()}")
+            raise ValueError(f"No valid outfit combination found for {activity}/{gender}")
+
+def get_next_image_number(bucket_name):
+    """Get the next available image number by checking existing files in the bucket"""
+    try:
+        # Print current credentials status
+        creds_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+        print(f"\nChecking credentials at: {creds_path}")
+        if not creds_path:
+            print("WARNING: No credentials path set!")
+        elif not os.path.exists(creds_path):
+            print(f"WARNING: Credentials file not found at {creds_path}")
+        
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(bucket_name)
+        print(f"Successfully connected to bucket: {bucket_name}")
+        
+        # List all blobs with the prefix
+        blobs = list(bucket.list_blobs(prefix='outfits/outfit_'))
+        print(f"Found {len(blobs)} existing images")
+        
+        if not blobs:
+            return 1
+            
+        # Extract numbers from filenames
+        numbers = []
+        for blob in blobs:
+            try:
+                filename = blob.name.split('/')[-1]
+                num = int(filename.replace('outfit_', '').replace('.png', ''))
+                numbers.append(num)
+            except (IndexError, ValueError) as e:
+                print(f"Warning: Could not parse number from filename {blob.name}: {e}")
+                continue
+        
+        next_number = max(numbers) + 1 if numbers else 1
+        print(f"Next image number will be: {next_number}")
+        return next_number
+    except Exception as e:
+        print(f"\nError getting next image number: {e}")
+        print("\nTo fix this:")
+        print('1. Run in PowerShell: $env:GOOGLE_APPLICATION_CREDENTIALS="C:\\capstone\\tensile-pier-462514-j9-416aca8fc731.json"')
+        print("2. Make sure the file exists at that location")
+        print("3. Make sure the service account has access to the bucket")
+        return 1
 
 # Main loop
-SAMPLE_SIZE = 10
+SAMPLE_SIZE = 15
+start_number = get_next_image_number('outfitiq')
+print(f"Starting from image number: {start_number}")
+
 for i in range(SAMPLE_SIZE):
+    current_number = start_number + i
     weather = random.choice(weather_tags)
     gender = random.choice(genders)
     activity = random.choice(activities)
@@ -185,7 +260,7 @@ for i in range(SAMPLE_SIZE):
     weather = outfit['weather']
     gender = outfit['gender']
     try:
-        print(f"Generating image {i+1}: {prompt}")
+        print(f"Generating image {current_number}: {prompt}")
         api_key = "sk-jzJtzEbGJNEIjAFM4QuWiTde6yUlmAykEDfwPYdTjxHWBQ5M"
         url = "https://api.stability.ai/v2beta/stable-image/generate/sd3"
         headers = {
@@ -217,7 +292,7 @@ for i in range(SAMPLE_SIZE):
             print("Response text:", response.text)
             continue
         bucket_name = 'outfitiq'
-        gcs_key = f"outfits/outfit_{i+1}.png"
+        gcs_key = f"outfits/outfit_{current_number}.png"
         storage_client = storage.Client()
         bucket = storage_client.bucket(bucket_name)
         blob = bucket.blob(gcs_key)

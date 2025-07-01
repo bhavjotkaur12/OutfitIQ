@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "tensile-pier-462514-j9",
+  "private_key_id": "416aca8fc7319f468df8bc572576d670201eb3fc",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDPLz33N4w8FXzY\n7Ytg7ZOvh+r42AutLJZFLkLWg1rDYLNYVFrwECadG0CnER92Pq8mXZydS2FoN8Bx\n/llcdA2WuBUyZZMBfB1LyXvyZb8+uSLjl0pIXs3UHltC11878rjGx5dk2ySoCXqi\nvOSNNbDD9+Y9CFwxbgArsN4QvdflirRjv8j46962q44mMWlP6bjU5c31twZAlt/Z\njLa55D7wIbL0cSQWswrvl05hjg5T4+LNv1Frzluudw5RVMXNjyIP/MbDn0sgsfb2\nWjMx69XX9kaYQhTYOxQLJMTs11SajsNczk9xPVrpc1IPxbmcb4wSlHmr1Pc1xohk\nn1abJLMJAgMBAAECggEAY5KX3F2E90d4diVMLCxiIyVWh3wFuJfKLLt8Ae6lS2sJ\nJrV78w5AEJeNbf2ruj+MHAs3ft1Alj7dLawJNIbOFRapkUwB59/HkKnn+OpvjGyb\n2PfYCooNsBla0PgDXCNeLKK2HxG3P0828kmIKlmYd8aHj+OZs2Pjjxv0zeT/guBV\n0S9jA8HkPqxnkDGzCMFBn/vaESNOoOJzqXRFOvrZ3zs4REM8mn0gIoHB8PUF49+b\nlCJdjJG4Voq1binJnm6hLD076JrGQLxyg35JmywC1LenxgvMODSMek2fnrROyHcF\naNh2j/5uN7JS4XFvil/Bug2w9EatePUu5Ndi02AbtQKBgQD2Dxr2ac6szUYgJjtK\n5OnzpHCkOgrEszLEkwNgomwNTRcIylgwkq+W4y+MQ1ivxCTMCE9OQxiMdsTHle2Q\n5HeVzhMLNekfnPEt1pEQFC46mWhzNi+LmmGg4w9uPQqvKgFUrKhhCv69gNttUcto\nZu58NssdHjjvuZ6wRlGd9cgHnwKBgQDXjhKq4uM6T6uvIX6Q1jwAgwglHdpoSaMs\navD1q4g/VvDSkEifIrGkcbG92m5vhFCUjOa8sR/SD2YJxEsLt53F3CZyHt4o4p9p\nOahwOoYu506DvdrC4jX4fl/8DSneH96rm1FYrq/2fvLKKHkmqWdP+MqIKKps8Emw\nfLrIQNBkVwKBgQChX1S6iLfv4ox8Jza5rpm0nYL2Yc6QJEpGW3halwswSf+yVyox\naPJZjdOwNLbkR0ouucBxPlXKQVZa4vw0C3JWQBmDP68NeZs/CbqHhgSvj87NyJqz\n/uLKZj/Hd6cbK/xFcRrY0iIxXGIMNxmk9eSweCsLhLeomN73EpcSdo/iVwKBgCkC\n4fBbbKoqgFq4v7Dk4dOjGoidTnGrGP2ZdzD2qtyKORWG2BpW6n+EFjIt/fb/sKki\nyb+633gC8AIJs9GN5NnBUhtCXjhfLb9CdhasO91uqtSL6bRMf8JAoRh+lKmrXJ0/\n1tFNozL94kmuO6ascniXuEkBm7NQYGTQxmTVWBDPAoGBAIZZ+xU72+NbLHCzStMc\n8FQ2jipvw3ai2B4/TQ+TnKRyjmyrT8APKqKpM/CDofLRg01vXsncC5qz+GpA1i6x\nKQWT4s/oG+B6zTcl/TX7/HBHgEMQqY4cB9TmH9qvA7kkCg3nMbxi2OIw6mXiMoqG\n008sxmKf8VzhjKzXBiP6pSgT\n-----END PRIVATE KEY-----\n",
+  "client_email": "storage-uploader@tensile-pier-462514-j9.iam.gserviceaccount.com",
+  "client_id": "103588253413085375877",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/storage-uploader%40tensile-pier-462514-j9.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
