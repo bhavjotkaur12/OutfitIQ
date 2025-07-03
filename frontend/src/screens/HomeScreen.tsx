@@ -10,15 +10,18 @@ import {
   PermissionsAndroid,
   Platform,
   Image,
+  Modal,
+  Alert,
 } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Geolocation from '@react-native-community/geolocation';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../navigation/types';
+import { OutfitItems, RawOutfit, LikedOutfit } from '../types/outfit';
 
 // Add this interface at the top of your file, after imports
 interface WeatherData {
@@ -39,6 +42,10 @@ const HomeScreen = () => {
   const [location, setLocation] = useState<{lat: number; lon: number} | null>(null);
   const [loadingWeather, setLoadingWeather] = useState(false);
   const [formality, setFormality] = useState('');
+  const [likedOutfits, setLikedOutfits] = useState<LikedOutfit[]>([]);
+  const [loadingLikedOutfits, setLoadingLikedOutfits] = useState(false);
+  const [selectedOutfit, setSelectedOutfit] = useState<LikedOutfit | null>(null);
+  const [showOutfitDetail, setShowOutfitDetail] = useState(false);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   // Updated emoji mapping with more relevant icons
@@ -130,8 +137,72 @@ const HomeScreen = () => {
     }
   };
 
+  const fetchLikedOutfits = async () => {
+    setLoadingLikedOutfits(true);
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        console.log('No token found');
+        return;
+      }
+
+      console.log('Fetching liked outfits...');
+      const response = await fetch('http://10.0.2.2:3000/api/closet/liked', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        console.error('Failed to fetch liked outfits:', response.status);
+        throw new Error('Failed to fetch liked outfits');
+      }
+
+      const data = await response.json();
+      console.log('Raw liked outfits data:', data);
+      
+      if (data.likedOutfits && Array.isArray(data.likedOutfits)) {
+        // Use a Map to ensure unique outfits by outfitId
+        const uniqueOutfits = new Map();
+        
+        data.likedOutfits.forEach((outfit: RawOutfit) => {
+          const outfitId = outfit.outfitId || outfit._id || '';
+          if (!uniqueOutfits.has(outfitId)) {
+            let fullImageUrl = outfit.image_url;
+            if (fullImageUrl && !fullImageUrl.startsWith('http')) {
+              fullImageUrl = `http://10.0.2.2:3000${fullImageUrl.startsWith('/') ? '' : '/'}${fullImageUrl}`;
+            }
+            
+            uniqueOutfits.set(outfitId, {
+              outfitId,
+              image_url: fullImageUrl,
+              outfit_items: outfit.outfit_items || {},
+              likedAt: new Date(outfit.likedAt || outfit.dateAdded || Date.now()),
+              activity: outfit.activity,
+              weather: outfit.weather,
+              formality: outfit.formality
+            });
+          }
+        });
+
+        const outfits = Array.from(uniqueOutfits.values());
+        console.log('Final mapped outfits:', outfits);
+        setLikedOutfits(outfits);
+      } else {
+        console.log('No liked outfits found or invalid data format');
+        setLikedOutfits([]);
+      }
+    } catch (error) {
+      console.error('Error fetching liked outfits:', error);
+      setLikedOutfits([]);
+    } finally {
+      setLoadingLikedOutfits(false);
+    }
+  };
+
   useEffect(() => {
     fetchUserProfile();
+    fetchLikedOutfits();
   }, []);
 
   useEffect(() => {
@@ -143,6 +214,13 @@ const HomeScreen = () => {
       fetchWeather();
     }
   }, [location]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log('Home screen focused - fetching liked outfits');
+      fetchLikedOutfits();
+    }, [])
+  );
 
   const fetchUserProfile = async () => {
     try {
@@ -183,6 +261,59 @@ const HomeScreen = () => {
   // Add navigation handler for closet icon
   const handleClosetPress = () => {
     navigation.navigate('VirtualCloset'); // Make sure 'VirtualCloset' is defined in your navigation types
+  };
+
+  const handleUnlike = async (outfitId: string) => {
+    try {
+      console.log('Attempting to unlike outfit:', outfitId);
+      // Remove any quotes or ObjectId wrapper if present
+      const cleanOutfitId = outfitId.replace(/^ObjectId\(['"](.+)['"]\)$/, '$1');
+      
+      const token = await AsyncStorage.getItem('token');
+      const response = await fetch(`http://10.0.2.2:3000/api/closet/like/${cleanOutfitId}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('Unlike response status:', response.status);
+      if (!response.ok) {
+        throw new Error('Failed to unlike outfit');
+      }
+
+      const data = await response.json();
+      console.log('Unlike response data:', data);
+
+      if (response.ok) {
+        setLikedOutfits(prev => prev.filter(outfit => outfit.outfitId !== outfitId));
+      }
+    } catch (error) {
+      console.error('Error unliking outfit:', error);
+      Alert.alert('Error', 'Failed to unlike outfit');
+    }
+  };
+
+  const handleAddToCloset = async (outfit: LikedOutfit) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await fetch('http://10.0.2.2:3000/api/closet/add', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ outfit })
+      });
+
+      if (response.ok) {
+        Alert.alert('Success', 'Outfit added to your closet!');
+      }
+    } catch (error) {
+      console.error('Error adding to closet:', error);
+      Alert.alert('Error', 'Failed to add outfit to closet');
+    }
   };
 
   if (loading) {
@@ -240,6 +371,62 @@ const HomeScreen = () => {
             <Text style={styles.errorText}>Unable to fetch weather</Text>
           )}
         </View>
+
+        {/* Liked Outfits Section */}
+        {loadingLikedOutfits ? (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Your Liked Outfits</Text>
+            <ActivityIndicator size="small" color="#000" />
+          </View>
+        ) : likedOutfits && likedOutfits.length > 0 ? (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Your Liked Outfits</Text>
+            <ScrollView 
+              horizontal 
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.likedOutfitsScroll}
+            >
+              {likedOutfits.map((outfit) => (
+                <View key={outfit.outfitId} style={styles.likedOutfitCard}>
+                  <TouchableOpacity 
+                    style={styles.outfitCardContent}
+                    onPress={() => {
+                      setSelectedOutfit(outfit);
+                      setShowOutfitDetail(true);
+                    }}
+                  >
+                    {outfit.image_url ? (
+                      <Image
+                        source={{ uri: outfit.image_url }}
+                        style={styles.likedOutfitImage}
+                        resizeMode="cover"
+                      />
+                    ) : (
+                      <View style={[styles.likedOutfitImage, styles.placeholderContainer]}>
+                        <Icon name="image" size={40} color="#999" />
+                        <Text style={styles.placeholderText}>No Image</Text>
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    style={styles.likedOutfitOverlay}
+                    onPress={(e) => {
+                      e.stopPropagation();
+                      handleUnlike(outfit.outfitId);
+                    }}
+                  >
+                    <Icon name="favorite" size={20} color="#fff" />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </ScrollView>
+          </View>
+        ) : (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Your Liked Outfits</Text>
+            <Text style={styles.noOutfitsText}>No liked outfits yet</Text>
+          </View>
+        )}
 
         {/* Activities Section */}
         <View style={styles.section}>
@@ -328,6 +515,51 @@ const HomeScreen = () => {
           <Icon name="account-circle" size={28} color="#000" />
         </TouchableOpacity>
       </View>
+
+      {/* Modify the detail modal */}
+      <Modal
+        visible={showOutfitDetail}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setShowOutfitDetail(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            {selectedOutfit && (
+              <>
+                <TouchableOpacity 
+                  style={styles.closeIconButton}
+                  onPress={() => setShowOutfitDetail(false)}
+                >
+                  <Icon name="close" size={24} color="#000" />
+                </TouchableOpacity>
+
+                <Image
+                  source={{ uri: selectedOutfit.image_url }}
+                  style={styles.modalImage}
+                  resizeMode="contain"
+                />
+                <View style={styles.modalDetails}>
+                  <Text style={styles.modalText}>Activity: {selectedOutfit.activity}</Text>
+                  <Text style={styles.modalText}>Weather: {selectedOutfit.weather}</Text>
+                  <Text style={styles.modalText}>Formality: {selectedOutfit.formality}</Text>
+                </View>
+                
+                <TouchableOpacity 
+                  style={styles.addToClosetButton}
+                  onPress={() => {
+                    handleAddToCloset(selectedOutfit);
+                    setShowOutfitDetail(false);
+                  }}
+                >
+                  <Icon name="checkroom" size={24} color="#fff" />
+                  <Text style={styles.buttonText}>Add to Closet</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -533,6 +765,101 @@ const styles = StyleSheet.create({
   },
   formalityText: {
     fontWeight: '500',
+  },
+  likedOutfitsScroll: {
+    paddingHorizontal: 8,
+  },
+  likedOutfitCard: {
+    width: 120,
+    height: 160,
+    marginHorizontal: 8,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: '#f8f9fa',
+    position: 'relative',
+  },
+  outfitCardContent: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  likedOutfitImage: {
+    width: '100%',
+    height: '100%',
+  },
+  likedOutfitOverlay: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(255, 68, 68, 0.8)',
+    borderRadius: 12,
+    padding: 4,
+  },
+  placeholderContainer: {
+    backgroundColor: '#f0f0f0',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  placeholderText: {
+    color: '#999',
+    marginTop: 8,
+    fontSize: 12,
+  },
+  noOutfitsText: {
+    color: '#666',
+    textAlign: 'center',
+    marginTop: 8,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 20,
+    width: '90%',
+    maxHeight: '90%',
+    position: 'relative',
+  },
+  modalImage: {
+    width: '100%',
+    height: 400,
+    borderRadius: 10,
+    marginTop: 20,
+  },
+  modalDetails: {
+    marginTop: 20,
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  closeIconButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: 20,
+    padding: 8,
+  },
+  addToClosetButton: {
+    backgroundColor: '#000',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+    gap: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 

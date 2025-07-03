@@ -73,6 +73,35 @@ const RecommendationScreen = ({ route, navigation }: Props) => {
     }
   };
 
+  const fetchLikedOutfits = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) return;
+
+      const response = await fetch('http://10.0.2.2:3000/api/closet/liked', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch liked outfits');
+
+      const data = await response.json();
+      
+      // Update ratings state with liked outfits
+      const newRatings = { ...ratings };
+      data.likedOutfits.forEach((item: { outfitId: string }) => {
+        newRatings[item.outfitId] = {
+          ...newRatings[item.outfitId],
+          liked: true
+        };
+      });
+      setRatings(newRatings);
+    } catch (error) {
+      console.error('Error fetching liked outfits:', error);
+    }
+  };
+
   useEffect(() => {
     let isMounted = true;
 
@@ -82,7 +111,8 @@ const RecommendationScreen = ({ route, navigation }: Props) => {
         if (token && isMounted) {
           await Promise.all([
             getRecommendations(),
-            fetchUserCloset()
+            fetchUserCloset(),
+            fetchLikedOutfits()
           ]);
         }
       } catch (error) {
@@ -217,13 +247,45 @@ const RecommendationScreen = ({ route, navigation }: Props) => {
         throw new Error('No authentication token found');
       }
 
-      const newRatings = {
-        ...ratings,
-        [outfitId]: { ...ratings[outfitId], ...rating }
-      };
-      setRatings(newRatings);
+      if ('liked' in rating) {
+        console.log('Sending like/unlike request for outfit:', outfitId);
+        
+        // Clean the outfitId (remove any ObjectId wrapper if present)
+        const cleanOutfitId = outfitId.replace(/^ObjectId\(['"](.+)['"]\)$/, '$1');
+        
+        const response = await fetch(`http://10.0.2.2:3000/api/closet/like/${cleanOutfitId}`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
 
-      if (rating.owned) {
+        const data = await response.json();
+        console.log('Like/unlike response:', data);
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to update like status');
+        }
+
+        if (!data.success) {
+          throw new Error(data.message || 'Server reported failure');
+        }
+
+        // Update local state based on server response
+        setRatings(prev => ({
+          ...prev,
+          [outfitId]: { 
+            ...prev[outfitId], 
+            liked: data.liked 
+          }
+        }));
+
+        // Optionally refresh liked outfits
+        await fetchLikedOutfits();
+      }
+
+      if ('owned' in rating) {
         const outfit = recommendations.find(r => r._id === outfitId);
         if (!outfit) {
           throw new Error('Outfit not found');
@@ -263,7 +325,18 @@ const RecommendationScreen = ({ route, navigation }: Props) => {
       }
     } catch (error) {
       console.error('Error in handleRating:', error);
-      Alert.alert('Error', error instanceof Error ? error.message : 'Failed to update closet. Please try again.');
+      
+      // Show more specific error message
+      Alert.alert(
+        'Error',
+        error instanceof Error ? error.message : 'Failed to update. Please try again.'
+      );
+      
+      // Revert local state on error
+      setRatings(prevRatings => ({
+        ...prevRatings,
+        [outfitId]: { ...prevRatings[outfitId] }
+      }));
     }
   };
 

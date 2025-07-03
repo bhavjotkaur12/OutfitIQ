@@ -1,5 +1,25 @@
 const mongoose = require('mongoose');
 
+// Define a schema for outfit items
+const OutfitItemSchema = new mongoose.Schema({
+  name: String,
+  color: String,
+  fit: String,
+  notes: String,
+  lastWorn: Date
+}, { _id: false, strict: false }); // Disable _id and allow flexible fields
+
+const likedOutfitSchema = new mongoose.Schema({
+  outfitId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Outfit'  // This should reference your Outfit model
+  },
+  likedAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -19,25 +39,39 @@ const userSchema = new mongoose.Schema({
       prompt: String,
       image_url: String,
       outfit_items: {
-        top: String,
-        bottom: String,
-        shoes: String,
-        accessory: String,
-        dress: String
+        type: Object,    // Keep it as Object type
+        default: {}      // Default empty object
       },
       weather: String,
-      activity: String,
+      activities: [String],
       formality: String,
       gender: String,
       dateAdded: {
         type: Date,
         default: Date.now
+      },
+      lastWorn: {
+        type: Date,
+        default: null
       }
     }],
-    default: []  // Initialize as empty array
+    default: []
   },
+  likedOutfits: [likedOutfitSchema],
 
   // Add more fields as needed (name, etc.)
+}, { minimize: false }); // Prevent Mongoose from removing empty objects
+
+// Add a pre-save middleware to ensure outfit_items is always an object
+userSchema.pre('save', function(next) {
+  if (this.virtualCloset) {
+    this.virtualCloset.forEach(outfit => {
+      if (!outfit.outfit_items) {
+        outfit.outfit_items = {};
+      }
+    });
+  }
+  next();
 });
 
 module.exports = mongoose.model('User', userSchema);

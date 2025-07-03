@@ -127,9 +127,9 @@ def get_fashion_recommendations(user_profile, preferences):
                 formality_boost = 1.0
                 
                 # Activity matching (case insensitive)
-                outfit_activity = outfit.get('activity', '').lower()
-                if any(activity in outfit_activity for activity in target_activities):
-                    activity_boost = 1.3
+                outfit_activities = outfit.get('activities', []) if isinstance(outfit.get('activities'), list) else [outfit.get('activity', '')]
+                matching_activities = sum(1 for activity in outfit_activities if any(target in activity.lower() for target in target_activities))
+                activity_boost = 1.0 + (0.3 * matching_activities / len(outfit_activities))  # Proportional boost based on matching activities
                 
                 # Comfort level matching (check outfit items)
                 outfit_items = outfit.get('outfit_items', {})

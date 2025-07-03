@@ -1,4 +1,5 @@
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { LikedOutfit } from '../types/outfit';
 
 export type AuthStackParamList = {
     Login: undefined;
@@ -63,6 +64,7 @@ export type RootStackParamList = {
     activity?: string;
     comfortLevel?: string;
     formality?: string;
+    selectedOutfit?: LikedOutfit;
   };
   VirtualCloset: undefined;
 };
