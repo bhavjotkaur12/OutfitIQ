@@ -372,6 +372,25 @@ const HomeScreen = () => {
           )}
         </View>
 
+        {/* Add Style Boost Card */}
+        <TouchableOpacity 
+          style={styles.styleBoostCard}
+          onPress={() => navigation.navigate('StyleBoost', { weather: weather })}
+        >
+          <View style={styles.styleBoostContent}>
+            <View style={styles.styleBoostLeft}>
+              <Icon name="auto-awesome" size={24} color="#FFD700" />
+              <View style={styles.styleBoostTextContainer}>
+                <Text style={styles.styleBoostTitle}>Daily Style Boost</Text>
+                <Text style={styles.styleBoostSubtitle}>Get your daily fashion tip!</Text>
+              </View>
+            </View>
+            <View style={styles.styleBoostRight}>
+              <Icon name="chevron-right" size={24} color="#666" />
+            </View>
+          </View>
+        </TouchableOpacity>
+
         {/* Liked Outfits Section */}
         {loadingLikedOutfits ? (
           <View style={styles.section}>
@@ -506,13 +525,27 @@ const HomeScreen = () => {
         </TouchableOpacity>
       </ScrollView>
 
-      {/* Bottom Icons */}
-      <View style={styles.bottomIcons}>
-        <TouchableOpacity style={styles.bottomIconButton}>
+      {/* Update Bottom Navigation */}
+      <View style={styles.bottomNav}>
+        
+        <TouchableOpacity 
+          style={styles.bottomNavItem}
+          onPress={() => navigation.navigate('StyleBoost', { weather: weather })}
+        >
+          <Icon name="auto-awesome" size={24} color="#000" />
+        </TouchableOpacity>
+        
+        <TouchableOpacity 
+          style={styles.bottomNavItem}
+        >
           <Icon name="settings" size={24} color="#000" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomIconButton}>
-          <Icon name="account-circle" size={28} color="#000" />
+        
+        <TouchableOpacity 
+          style={styles.bottomNavItem}
+          onPress={() => navigation.navigate('Profile')}
+        >
+          <Icon name="account-circle" size={24} color="#000" />
         </TouchableOpacity>
       </View>
 
@@ -740,6 +773,11 @@ const styles = StyleSheet.create({
     padding: 16,
     marginHorizontal: 20,
   },
+  bottomIconText: {
+    fontSize: 12,
+    color: '#000',
+    marginTop: 4,
+  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -860,6 +898,79 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  // Style Boost Card styles
+  styleBoostCard: {
+    backgroundColor: 'white',
+    margin: 16,
+    padding: 16,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  styleBoostContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  styleBoostLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  styleBoostTextContainer: {
+    marginLeft: 12,
+  },
+  styleBoostTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#000',
+  },
+  styleBoostSubtitle: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 2,
+  },
+  styleBoostRight: {
+    backgroundColor: '#f5f5f5',
+    padding: 8,
+    borderRadius: 20,
+  },
+
+  // Bottom Navigation styles
+  bottomNav: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 5,
+  },
+  bottomNavItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    minWidth: 80,
+  },
+  bottomNavText: {
+    fontSize: 12,
+    color: '#000',
+    marginTop: 4,
+    fontWeight: '500',
   },
 });
 

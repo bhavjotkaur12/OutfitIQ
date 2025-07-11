@@ -12,6 +12,7 @@ import HomeScreen from '../screens/HomeScreen';
 import RecommendationScreen from '../screens/RecommendationScreen';
 import VirtualClosetScreen from '../screens/VirtualClosetScreen';
 import type { AuthStackParamList, RootStackParamList } from './types';
+import StyleBoostScreen from '../screens/StyleBoostScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -39,6 +40,22 @@ const AppNavigator = () => (
       component={VirtualClosetScreen}
       options={{
         headerShown: false
+      }}
+    />
+    <Stack.Screen 
+      name="StyleBoost" 
+      component={StyleBoostScreen}
+      options={{
+        title: 'Daily Style Boost',
+        headerShown: true,
+        // Add custom header styling
+        headerStyle: {
+          backgroundColor: '#fff',
+        },
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+        
       }}
     />
   </Stack.Navigator>

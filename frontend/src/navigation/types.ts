@@ -67,6 +67,16 @@ export type RootStackParamList = {
     selectedOutfit?: LikedOutfit;
   };
   VirtualCloset: undefined;
+  StyleBoost: {
+    weather: {
+      temp: number;
+      description: string;
+      feelsLike: number;
+      icon: string;
+      city: string;
+      region: string;
+    } | null;
+  };
 };
 
 // Make sure to export this type

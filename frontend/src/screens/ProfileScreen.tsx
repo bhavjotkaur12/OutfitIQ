@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../navigation/types';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Profile'>;
 
@@ -242,6 +243,33 @@ const styles = StyleSheet.create({
   modalItem: {
     fontSize: 16,
     marginVertical: 2,
+  },
+  styleBoostCard: {
+    backgroundColor: 'white',
+    margin: 16,
+    padding: 16,
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  styleBoostContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  styleBoostTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  styleBoostSubtitle: {
+    fontSize: 14,
+    color: '#666',
   },
 });
 

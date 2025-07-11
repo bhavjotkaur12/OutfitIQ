@@ -58,6 +58,11 @@ const userSchema = new mongoose.Schema({
     default: []
   },
   likedOutfits: [likedOutfitSchema],
+  fcmToken: String,
+  achievements: [{
+    type: String,
+    dateEarned: Date
+  }],
 
   // Add more fields as needed (name, etc.)
 }, { minimize: false }); // Prevent Mongoose from removing empty objects

@@ -25,6 +25,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/user', require('./routes/user'));
 app.use('/api', recommendationsRouter);
 app.use('/api/closet', closetRoutes);
+app.use('/api/style-boost', require('./routes/styleBoost'));
 
 console.log('Serving static files from:', path.join(process.cwd(), 'public'));
 
